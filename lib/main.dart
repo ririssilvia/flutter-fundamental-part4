@@ -27,13 +27,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
+  final _saved = <WordPair>{};
   final _biggerFont = const TextStyle(fontSize: 18);
- 
+
   @override
   Widget build(BuildContext context) {
-    // #docregion itemBuilder
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
       itemBuilder: /*1*/ (context, i) {
@@ -43,18 +44,30 @@ class _RandomWordsState extends State<RandomWords> {
         if (index >= _suggestions.length) {
           _suggestions.addAll(generateWordPairs().take(10)); /*4*/
         }
+
+        final alreadySaved = _saved.contains(_suggestions[index]);
+
         // #docregion listTile
         return ListTile(
           title: Text(
             _suggestions[index].asPascalCase,
             style: _biggerFont,
           ),
+          trailing: Icon(
+            alreadySaved ? Icons.favorite : Icons.favorite_border,
+            color: alreadySaved ? Colors.red : null,
+            semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+          ),
         );
+        // #enddocregion listTile
       },
     );
+    // #enddocregion itemBuilder
   }
+  // #enddocregion RWS-build
+  // #docregion RWS-var
 }
-
+// #enddocregion RWS-var
 
 class RandomWords extends StatefulWidget {
   const RandomWords({super.key});
